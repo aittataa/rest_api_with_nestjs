@@ -13,6 +13,7 @@ export class CategoriesService {
   async getCategories(limit: number, page_index: number) {
     try {
       const [data, total] = await this.categoryRepository.findAndCount({
+        where: { status: 1 },
         take: limit,
         skip: (page_index - 1) * limit,
       });
@@ -47,7 +48,7 @@ export class CategoriesService {
 
   async createCategory(category: Category): Promise<Category> {
     const value = await this.categoryRepository.save(category);
-    return await this.categoryRepository.findOne(value.cid);
+    return await this.getCategory(value.cid);
   }
 
   async updateCategory(id: number, category: Category): Promise<Category> {
@@ -56,7 +57,7 @@ export class CategoriesService {
       throw new NotFoundException();
     } else {
       await this.categoryRepository.update(id, category);
-      return await this.categoryRepository.findOne(id);
+      return await this.getCategory(value.cid);
     }
   }
 
