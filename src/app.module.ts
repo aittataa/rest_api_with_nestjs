@@ -5,6 +5,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { Category } from './categories/category.entity';
 import { Wallpaper } from './wallpaper/wallpaper.entity';
 import { WallpaperModule } from './wallpaper/wallpapers.module';
+import { FavoriteModule } from './favorite/favorite.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { WallpaperModule } from './wallpaper/wallpapers.module';
     TypeOrmModule.forFeature([Category, Wallpaper]),
     CategoriesModule,
     WallpaperModule,
+    FavoriteModule,
   ],
 })
 export class AppModule {
