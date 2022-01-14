@@ -2,10 +2,12 @@ import { Category } from 'src/categories/category.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'tbl_wallpaper' })
@@ -13,16 +15,13 @@ export class Wallpaper {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ default: 0 })
   featured: number;
 
   @Column({ default: 'Portrait' })
   wallpaper_type: string;
 
-  @CreateDateColumn()
-  image_date: Date;
-
-  @Column({ nullable: true })
+  @Column()
   image: string;
 
   @Column()
@@ -42,6 +41,15 @@ export class Wallpaper {
 
   @Column()
   total_download: number;
+
+  @CreateDateColumn()
+  create_at: Date;
+
+  @UpdateDateColumn()
+  update_at: Date;
+
+  @DeleteDateColumn()
+  delete_at: Date;
 
   @ManyToOne(() => Category, (category) => category.wallpapers)
   @JoinColumn({ name: 'cat_id' })

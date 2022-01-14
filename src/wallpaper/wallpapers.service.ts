@@ -8,12 +8,12 @@ import { Wallpaper } from './wallpaper.entity';
 export class WallpaperService {
   constructor(
     @InjectRepository(Wallpaper)
-    private wallpaperRepository: Repository<Wallpaper>,
+    private repository: Repository<Wallpaper>,
   ) {}
 
   async getWallpapers(limit: number, page_index: number) {
     try {
-      const [data, total] = await this.wallpaperRepository.findAndCount({
+      const [data, total] = await this.repository.findAndCount({
         where: { category: { status: 1 } },
         relations: ['category'],
         take: limit,
@@ -38,7 +38,7 @@ export class WallpaperService {
   }
 
   async getWallpaper(id: number): Promise<Wallpaper> {
-    const value = await this.wallpaperRepository.findOne(id, {
+    const value = await this.repository.findOne(id, {
       relations: ['category'],
     });
     if (!value) {
@@ -49,26 +49,27 @@ export class WallpaperService {
   }
 
   async createWallpaper(wallpaper: Wallpaper): Promise<Wallpaper> {
-    const value = await this.wallpaperRepository.save(wallpaper);
+    const value = await this.repository.save(wallpaper);
     return this.getWallpaper(value.id);
   }
 
   async updateWallpaper(id: number, wallpaper: Wallpaper): Promise<Wallpaper> {
-    const value = await this.wallpaperRepository.findOne(id);
+    const value = await this.repository.findOne(id);
     if (!value) {
       throw new NotFoundException();
     } else {
-      await this.wallpaperRepository.update(id, wallpaper);
+      await this.repository.update(id, wallpaper);
       return this.getWallpaper(value.id);
     }
   }
 
   async deleteWallpaper(id: number) {
-    const value = await this.wallpaperRepository.findOne(id);
+    const value = await this.repository.findOne(id);
     if (!value) {
       throw new NotFoundException();
     } else {
-      await this.wallpaperRepository.delete(id);
+      value.delete_at = new Date(Date.now());
+      await this.repository.update(id, value);
       return {
         message: 'Successfully deleted',
       };

@@ -7,12 +7,12 @@ import { Category } from './category.entity';
 export class CategoriesService {
   constructor(
     @InjectRepository(Category)
-    private categoryRepository: Repository<Category>,
+    private repository: Repository<Category>,
   ) {}
 
   async getCategories(limit: number, page_index: number) {
     try {
-      const [data, total] = await this.categoryRepository.findAndCount({
+      const [data, total] = await this.repository.findAndCount({
         where: { status: 1 },
         take: limit,
         skip: (page_index - 1) * limit,
@@ -36,7 +36,7 @@ export class CategoriesService {
   }
 
   async getCategory(id: number): Promise<Category> {
-    const value = await this.categoryRepository.findOne(id, {
+    const value = await this.repository.findOne(id, {
       relations: ['wallpapers'],
     });
     if (!value) {
@@ -47,26 +47,27 @@ export class CategoriesService {
   }
 
   async createCategory(category: Category): Promise<Category> {
-    const value = await this.categoryRepository.save(category);
+    const value = await this.repository.save(category);
     return await this.getCategory(value.cid);
   }
 
   async updateCategory(id: number, category: Category): Promise<Category> {
-    const value = await this.categoryRepository.findOne(id);
+    const value = await this.repository.findOne(id);
     if (!value) {
       throw new NotFoundException();
     } else {
-      await this.categoryRepository.update(id, category);
+      await this.repository.update(id, category);
       return await this.getCategory(value.cid);
     }
   }
 
   async deleteCategory(id: number) {
-    const value = await this.categoryRepository.findOne(id);
+    const value = await this.repository.findOne(id);
     if (!value) {
       throw new NotFoundException();
     } else {
-      await this.categoryRepository.delete(id);
+      value.delete_at = new Date(Date.now());
+      await this.repository.update(id, value);
       return {
         message: 'Successfully deleted',
       };
