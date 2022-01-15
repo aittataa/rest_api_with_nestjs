@@ -1,27 +1,37 @@
-import { Wallpaper } from 'src/wallpaper/wallpaper.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'tbl_category' })
-export class Category {
+@Entity({ name: 'tbl_user' })
+export class User {
   @PrimaryGeneratedColumn()
-  id_category: number;
+  id_user: number;
 
   @Column({ nullable: false })
-  category_name: string;
+  user_name: string;
 
   @Column({ nullable: false })
-  category_image: string;
+  user_username: string;
+
+  @Column({ nullable: false })
+  user_email: string;
+
+  @Column({ nullable: false })
+  user_password: string;
+
+  @Column({ nullable: false })
+  user_phone: string;
+
+  @Column({ nullable: false })
+  user_type: string;
 
   @Column({ nullable: false, default: 0 })
-  category_status: number;
+  user_status: number;
 
   @CreateDateColumn()
   create_at: Date;
@@ -31,7 +41,4 @@ export class Category {
 
   @DeleteDateColumn()
   delete_at: Date;
-
-  @OneToMany(() => Wallpaper, (wallpaper) => wallpaper.category)
-  wallpapers: Wallpaper[];
 }

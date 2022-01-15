@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { Wallpaper } from './wallpaper.entity';
 import { WallpaperService } from './wallpapers.service';
 
@@ -15,8 +24,8 @@ export class WallpapersController {
   }
 
   @Get(':id')
-  getWallpaper(@Param() _id: number) {
-    return this.service.getWallpaper(_id);
+  getWallpaper(@Param('id') id: number) {
+    return this.service.getWallpaper(id);
   }
 
   @Post()

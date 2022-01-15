@@ -1,6 +1,8 @@
 # compiled output
+/.database
 /dist
 /node_modules
+/test
 
 # Logs
 logs

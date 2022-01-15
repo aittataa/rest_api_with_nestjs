@@ -14,7 +14,7 @@ export class WallpaperService {
   async getWallpapers(limit: number, page_index: number) {
     try {
       const [data, total] = await this.repository.findAndCount({
-        where: { category: { status: 1 } },
+        where: { category: { category_status: 1 } },
         relations: ['category'],
         take: limit,
         skip: (page_index - 1) * limit,
@@ -24,7 +24,7 @@ export class WallpaperService {
         total: total,
         page_index: Math.ceil(page_index) || 1,
         page_count: Math.ceil(total / limit) || 1,
-        data: data.sort((a, b) => b.id - a.id),
+        data: data.sort((a, b) => b.id_wallpaper - a.id_wallpaper),
       };
     } catch (e) {
       return {
@@ -50,7 +50,7 @@ export class WallpaperService {
 
   async createWallpaper(wallpaper: Wallpaper): Promise<Wallpaper> {
     const value = await this.repository.save(wallpaper);
-    return this.getWallpaper(value.id);
+    return this.getWallpaper(value.id_wallpaper);
   }
 
   async updateWallpaper(id: number, wallpaper: Wallpaper): Promise<Wallpaper> {
@@ -59,7 +59,7 @@ export class WallpaperService {
       throw new NotFoundException();
     } else {
       await this.repository.update(id, wallpaper);
-      return this.getWallpaper(value.id);
+      return this.getWallpaper(value.id_wallpaper);
     }
   }
 
