@@ -1,5 +1,7 @@
 import { Favorite } from 'src/favorites/favorite.entity';
+import * as bcrypt from 'bcrypt';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -20,9 +22,16 @@ export class User {
   @Column({ nullable: false })
   user_username: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   user_email: string;
 
+  @BeforeInsert()
+  async hashPassword() {
+    this.user_password = await bcrypt.hash(
+      this.user_password,
+      Number(process.env.HASH_SALT),
+    );
+  }
   @Column({ nullable: false })
   user_password: string;
 
@@ -31,6 +40,9 @@ export class User {
 
   @Column({ nullable: false, default: 'User' })
   user_type: string;
+
+  @Column({ nullable: false })
+  user_image: string;
 
   @Column({ nullable: false, default: 0 })
   user_status: number;
