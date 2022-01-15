@@ -36,7 +36,9 @@ export class UsersService {
   }
 
   async getUser(id: number): Promise<User> {
-    const value = await this.repository.findOne(id);
+    const value = await this.repository.findOne(id, {
+      relations: ['favorites'],
+    });
     if (!value) {
       throw new NotFoundException();
     } else {
@@ -49,26 +51,26 @@ export class UsersService {
     return await this.getUser(value.id_user);
   }
 
-    async updateUser(id: number, user: User): Promise<User> {
-      const value = await this.repository.findOne(id);
-      if (!value) {
-        throw new NotFoundException();
-      } else {
-        await this.repository.update(id, user);
-        return await this.getUser(value.id_user);
-      }
+  async updateUser(id: number, user: User): Promise<User> {
+    const value = await this.repository.findOne(id);
+    if (!value) {
+      throw new NotFoundException();
+    } else {
+      await this.repository.update(id, user);
+      return await this.getUser(value.id_user);
     }
+  }
 
-    async deleteUser(id: number) {
-      const value = await this.repository.findOne(id);
-      if (!value) {
-        throw new NotFoundException();
-      } else {
-        value.delete_at = new Date(Date.now());
-        await this.repository.update(id, value);
-        return {
-          message: 'Successfully deleted',
-        };
-      }
+  async deleteUser(id: number) {
+    const value = await this.repository.findOne(id);
+    if (!value) {
+      throw new NotFoundException();
+    } else {
+      value.delete_at = new Date(Date.now());
+      await this.repository.update(id, value);
+      return {
+        message: 'Successfully deleted',
+      };
     }
+  }
 }

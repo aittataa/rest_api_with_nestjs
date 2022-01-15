@@ -11,6 +11,12 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
+import { User } from './users/user.entity';
+import { WallpaperService } from './wallpaper/wallpapers.service';
+import { CategoriesService } from './categories/categories.service';
+import { WallpapersController } from './wallpaper/wallpapers.controller';
+import { CategoriesController } from './categories/categories.controller';
+import { Favorite } from './favorites/favorite.entity';
 
 @Module({
   imports: [
@@ -24,14 +30,24 @@ import { UsersModule } from './users/users.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Category, Wallpaper]),
+    TypeOrmModule.forFeature([User, Category, Wallpaper, Favorite]),
+    UsersModule,
     CategoriesModule,
     WallpaperModule,
     FavoritesModule,
-    UsersModule,
   ],
-  providers: [FavoritesService, UsersService],
-  controllers: [FavoritesController, UsersController],
+  providers: [
+    UsersService,
+    CategoriesService,
+    WallpaperService,
+    FavoritesService,
+  ],
+  controllers: [
+    UsersController,
+    CategoriesController,
+    WallpapersController,
+    FavoritesController,
+  ],
 })
 export class AppModule {
   constructor(private connection: Connection) {}

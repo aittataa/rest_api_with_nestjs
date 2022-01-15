@@ -1,5 +1,6 @@
 import { IsAlpha, IsNotEmpty } from 'class-validator';
 import { Category } from 'src/categories/category.entity';
+import { Favorite } from 'src/favorites/favorite.entity';
 import {
   Column,
   CreateDateColumn,
@@ -7,6 +8,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -48,4 +50,7 @@ export class Wallpaper {
   @ManyToOne(() => Category, (category) => category.wallpapers)
   @JoinColumn({ name: 'category_id' })
   category: Category;
+
+  @OneToMany(() => Favorite, (favorite) => favorite.user)
+  favorites: Favorite[];
 }

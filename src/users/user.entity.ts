@@ -1,8 +1,10 @@
+import { Favorite } from 'src/favorites/favorite.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,7 +29,7 @@ export class User {
   @Column({ nullable: false })
   user_phone: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, default: 'User' })
   user_type: string;
 
   @Column({ nullable: false, default: 0 })
@@ -41,4 +43,7 @@ export class User {
 
   @DeleteDateColumn()
   delete_at: Date;
+
+  @OneToMany(() => Favorite, (favorite) => favorite.user)
+  favorites: Favorite[];
 }
