@@ -37,6 +37,7 @@ export class UsersService {
 
   async getUser(id: number): Promise<User> {
     const value = await this.repository.findOne(id, {
+      where: { user_status: 1 },
       relations: ['favorites'],
     });
     if (!value) {

@@ -13,7 +13,7 @@ export class FavoritesService {
   async getFavorites(limit: number, page_index: number) {
     try {
       const [data, total] = await this.repository.findAndCount({
-        //where: { category: { category_status: 1 } },
+        where: { favorite_status: 1 },
         take: limit,
         skip: (page_index - 1) * limit,
       });
@@ -36,7 +36,9 @@ export class FavoritesService {
   }
 
   async getFavorite(id: number): Promise<Favorite> {
-    const value = await this.repository.findOne(id);
+    const value = await this.repository.findOne(id, {
+      where: { favorite_status: 1 },
+    });
     if (!value) {
       throw new NotFoundException();
     } else {

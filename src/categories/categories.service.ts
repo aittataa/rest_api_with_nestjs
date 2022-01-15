@@ -37,6 +37,7 @@ export class CategoriesService {
 
   async getCategory(id: number): Promise<Category> {
     const value = await this.repository.findOne(id, {
+      where: { category_status: 1 },
       relations: ['wallpapers'],
     });
     if (!value) {

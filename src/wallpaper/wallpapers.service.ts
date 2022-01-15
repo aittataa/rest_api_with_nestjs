@@ -39,6 +39,7 @@ export class WallpaperService {
 
   async getWallpaper(id: number): Promise<Wallpaper> {
     const value = await this.repository.findOne(id, {
+      where: { wallpaper_status: 1 },
       relations: ['category'],
     });
     if (!value) {
