@@ -23,7 +23,7 @@ export class UsersService {
         total: total,
         page_index: Math.ceil(page_index) || 1,
         page_count: Math.ceil(total / limit) || 1,
-        data: data.sort((a, b) => b.id_user - a.id_user),
+        data: data, //.sort((a, b) => b.id_user - a.id_user),
       };
     } catch (e) {
       return {
@@ -39,7 +39,7 @@ export class UsersService {
   async getUser(id: number): Promise<User> {
     const value = await this.repository.findOne(id, {
       where: { user_status: 1 },
-      relations: ['favorites'],
+      relations: ['favorites', 'ratings'],
     });
     if (!value) {
       throw new NotFoundException();

@@ -24,7 +24,7 @@ export class WallpaperService {
         total: total,
         page_index: Math.ceil(page_index) || 1,
         page_count: Math.ceil(total / limit) || 1,
-        data: data.sort((a, b) => b.id_wallpaper - a.id_wallpaper),
+        data: data, //.sort((a, b) => b.id_wallpaper - a.id_wallpaper),
       };
     } catch (e) {
       return {

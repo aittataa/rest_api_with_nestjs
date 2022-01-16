@@ -14,6 +14,7 @@ export class FavoritesService {
     try {
       const [data, total] = await this.repository.findAndCount({
         where: { favorite_status: 1 },
+        relations: ['user', 'wallpaper'],
         take: limit,
         skip: (page_index - 1) * limit,
       });
@@ -22,7 +23,7 @@ export class FavoritesService {
         total: total,
         page_index: Math.ceil(page_index) || 1,
         page_count: Math.ceil(total / limit) || 1,
-        data: data.sort((a, b) => b.id_favorite - a.id_favorite),
+        data: data, //.sort((a, b) => b.id_favorite - a.id_favorite),
       };
     } catch (e) {
       return {
@@ -38,6 +39,7 @@ export class FavoritesService {
   async getFavorite(id: number): Promise<Favorite> {
     const value = await this.repository.findOne(id, {
       where: { favorite_status: 1 },
+      relations: ['user', 'wallpaper'],
     });
     if (!value) {
       throw new NotFoundException();

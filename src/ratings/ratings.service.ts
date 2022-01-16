@@ -14,6 +14,7 @@ export class RatingsService {
     try {
       const [data, total] = await this.repository.findAndCount({
         where: { rating_status: 1 },
+        relations: ['user', 'wallpaper'],
         take: limit,
         skip: (page_index - 1) * limit,
       });
@@ -22,7 +23,7 @@ export class RatingsService {
         total: total,
         page_index: Math.ceil(page_index) || 1,
         page_count: Math.ceil(total / limit) || 1,
-        data: data.sort((a, b) => b.id_rating - a.id_rating),
+        data: data, //.sort((a, b) => b.id_rating - a.id_rating),
       };
     } catch (e) {
       return {
@@ -38,6 +39,7 @@ export class RatingsService {
   async getRating(id: number): Promise<Rating> {
     const value = await this.repository.findOne(id, {
       where: { rating_status: 1 },
+      relations: ['user', 'wallpaper'],
     });
     if (!value) {
       throw new NotFoundException();

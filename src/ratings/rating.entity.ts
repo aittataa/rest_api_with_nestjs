@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-// @Entity({ name: 'tbl_rating' })
+@Entity({ name: 'tbl_rating' })
 export class Rating {
   @PrimaryGeneratedColumn()
   id_rating: number;
