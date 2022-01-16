@@ -2,12 +2,15 @@ import { IsAlpha, IsNotEmpty } from 'class-validator';
 import { Category } from 'src/categories/category.entity';
 import { Favorite } from 'src/favorites/favorite.entity';
 import { Rating } from 'src/ratings/rating.entity';
+import { User } from 'src/users/user.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,

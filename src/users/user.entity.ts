@@ -6,11 +6,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Rating } from 'src/ratings/rating.entity';
+import { Wallpaper } from 'src/wallpaper/wallpaper.entity';
 
 @Entity({ name: 'tbl_user' })
 export class User {
