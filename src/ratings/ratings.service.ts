@@ -23,7 +23,7 @@ export class RatingsService {
         total: total,
         page_index: Math.ceil(page_index) || 1,
         page_count: Math.ceil(total / limit) || 1,
-        data: data, //.sort((a, b) => b.id_rating - a.id_rating),
+        data: data,
       };
     } catch (e) {
       return {

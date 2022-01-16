@@ -23,7 +23,7 @@ export class FavoritesService {
         total: total,
         page_index: Math.ceil(page_index) || 1,
         page_count: Math.ceil(total / limit) || 1,
-        data: data, //.sort((a, b) => b.id_favorite - a.id_favorite),
+        data: data,
       };
     } catch (e) {
       return {
