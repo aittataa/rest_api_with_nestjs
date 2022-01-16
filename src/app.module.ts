@@ -17,6 +17,10 @@ import { CategoriesService } from './categories/categories.service';
 import { WallpapersController } from './wallpaper/wallpapers.controller';
 import { CategoriesController } from './categories/categories.controller';
 import { Favorite } from './favorites/favorite.entity';
+import { ColorsService } from './colors/colors.service';
+import { ColorsController } from './colors/colors.controller';
+import { ColorsModule } from './colors/colors.module';
+import { Color } from './colors/color.entity';
 
 @Module({
   imports: [
@@ -30,23 +34,26 @@ import { Favorite } from './favorites/favorite.entity';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, Category, Wallpaper, Favorite]),
+    TypeOrmModule.forFeature([User, Category, Wallpaper, Favorite, Color]),
     UsersModule,
     CategoriesModule,
     WallpaperModule,
     FavoritesModule,
+    ColorsModule,
   ],
   providers: [
     UsersService,
     CategoriesService,
     WallpaperService,
     FavoritesService,
+    ColorsService,
   ],
   controllers: [
     UsersController,
     CategoriesController,
     WallpapersController,
     FavoritesController,
+    ColorsController,
   ],
 })
 export class AppModule {
