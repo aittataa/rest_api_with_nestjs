@@ -19,19 +19,12 @@ export class User {
   @Column({ nullable: false })
   user_name: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   user_username: string;
 
   @Column({ nullable: false, unique: true })
   user_email: string;
 
-  @BeforeInsert()
-  async hashPassword() {
-    this.user_password = await bcrypt.hash(
-      this.user_password,
-      Number(process.env.HASH_SALT),
-    );
-  }
   @Column({ nullable: false })
   user_password: string;
 
