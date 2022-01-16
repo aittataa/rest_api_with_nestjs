@@ -11,13 +11,16 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'tbl_favorite' })
-export class Favorite {
+// @Entity({ name: 'tbl_rating' })
+export class Rating {
   @PrimaryGeneratedColumn()
-  id_favorite: number;
+  id_rating: number;
+
+  @Column({ nullable: false, default: 0 })
+  rating_star: number;
 
   @Column({ nullable: false, default: 1 })
-  favorite_status: number;
+  rating_status: number;
 
   @CreateDateColumn()
   create_at: Date;

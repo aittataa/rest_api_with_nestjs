@@ -18,7 +18,7 @@ export class Color {
   @Column({ nullable: false })
   color_code: string;
 
-  @Column({ nullable: false, default: 0 })
+  @Column({ nullable: false, default: 1 })
   color_status: number;
 
   @CreateDateColumn()

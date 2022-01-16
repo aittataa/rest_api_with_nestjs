@@ -20,7 +20,7 @@ export class Category {
   @Column({ nullable: false })
   category_image: string;
 
-  @Column({ nullable: false, default: 0 })
+  @Column({ nullable: false, default: 1 })
   category_status: number;
 
   @CreateDateColumn()
