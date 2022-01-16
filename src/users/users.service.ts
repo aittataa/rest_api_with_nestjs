@@ -60,6 +60,9 @@ export class UsersService {
     if (!value) {
       throw new NotFoundException();
     } else {
+      const salt = await bcrypt.genSalt();
+      const password = await bcrypt.hash(user.user_password, salt);
+      user.user_password = password;
       await this.repository.update(id, user);
       return await this.getUser(value.id_user);
     }
