@@ -25,6 +25,9 @@ import { RatingsService } from './ratings/ratings.service';
 import { RatingsController } from './ratings/ratings.controller';
 import { RatingsModule } from './ratings/ratings.module';
 import { Rating } from './ratings/rating.entity';
+import { AuthenticationService } from './authentication/authentication.service';
+import { AuthenticationController } from './authentication/authentication.controller';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @Module({
   imports: [
@@ -52,6 +55,7 @@ import { Rating } from './ratings/rating.entity';
     FavoritesModule,
     ColorsModule,
     RatingsModule,
+    AuthenticationModule,
   ],
   providers: [
     UsersService,
@@ -60,6 +64,7 @@ import { Rating } from './ratings/rating.entity';
     FavoritesService,
     ColorsService,
     RatingsService,
+    AuthenticationService,
   ],
   controllers: [
     UsersController,
@@ -68,6 +73,7 @@ import { Rating } from './ratings/rating.entity';
     FavoritesController,
     ColorsController,
     RatingsController,
+    AuthenticationController,
   ],
 })
 export class AppModule {
