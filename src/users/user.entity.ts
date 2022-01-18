@@ -38,7 +38,7 @@ export class User {
   @Column({ nullable: false, default: 'User' })
   user_type: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, default: 'profile.png' })
   user_image: string;
 
   @Column({ nullable: false, default: 0 })

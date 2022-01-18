@@ -14,12 +14,12 @@ export class AuthenticationService {
 
   async keepUser(id: number): Promise<User> {
     const user = await this.repository.findOne(id, {
-      relations: [
-        'favorites',
-        'favorites.wallpaper',
-        'ratings',
-        'ratings.wallpaper',
-      ],
+      // relations: [
+      //   'favorites',
+      //   'favorites.wallpaper',
+      //   'ratings',
+      //   'ratings.wallpaper',
+      // ],
     });
     if (user) {
       return user;
@@ -34,12 +34,12 @@ export class AuthenticationService {
         { user_email: user.user_email },
         { user_username: user.user_username },
       ],
-      relations: [
-        'favorites',
-        'favorites.wallpaper',
-        'ratings',
-        'ratings.wallpaper',
-      ],
+      // relations: [
+      //   'favorites',
+      //   'favorites.wallpaper',
+      //   'ratings',
+      //   'ratings.wallpaper',
+      // ],
     });
     if (value) {
       const isMatch = bcrypt.compare(value.user_password, user.user_password);
@@ -59,12 +59,12 @@ export class AuthenticationService {
     user.user_password = password;
     const value = await this.repository.save(user);
     return await this.repository.findOne(value.id_user, {
-      relations: [
-        'favorites',
-        'favorites.wallpaper',
-        'ratings',
-        'ratings.wallpaper',
-      ],
+      // relations: [
+      //   'favorites',
+      //   'favorites.wallpaper',
+      //   'ratings',
+      //   'ratings.wallpaper',
+      // ],
     });
   }
 }
