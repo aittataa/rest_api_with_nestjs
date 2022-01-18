@@ -22,22 +22,18 @@ export class AuthenticationService {
 
   async loginUser(user: User) {
     const value = await this.repository.findOne({
-      where: { user_email: user.user_email },
+      where: [
+        { user_email: user.user_email },
+        { user_username: user.user_username },
+      ],
     });
     if (value) {
-      bcrypt.compare(
-        value.user_password,
-        user.user_password,
-        function (error, isMatch) {
-          if (error) {
-            return error;
-          } else if (!isMatch) {
-            return new NotFoundException();
-          } else {
-            return value;
-          }
-        },
-      );
+      const isMatch = bcrypt.compare(value.user_password, user.user_password);
+      if (isMatch) {
+        return value;
+      } else {
+        throw new NotFoundException({ description: `${isMatch}` });
+      }
     } else {
       throw new NotFoundException();
     }
