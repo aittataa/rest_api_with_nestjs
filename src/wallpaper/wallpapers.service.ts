@@ -40,7 +40,13 @@ export class WallpaperService {
   async getWallpaper(id: number): Promise<Wallpaper> {
     const value = await this.repository.findOne(id, {
       where: { category: { category_status: 1 }, wallpaper_status: 1 },
-      relations: ['category'],
+      relations: [
+        'category',
+        'favorites',
+        'favorites.user',
+        'ratings',
+        'ratings.user',
+      ],
     });
     if (!value) {
       throw new NotFoundException();

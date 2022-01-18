@@ -55,9 +55,9 @@ export class Wallpaper {
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
-  @OneToMany(() => Favorite, (favorite) => favorite.user)
+  @OneToMany(() => Favorite, (favorite) => favorite.wallpaper)
   favorites: Favorite[];
 
-  @OneToMany(() => Rating, (rating) => rating.user)
+  @OneToMany(() => Rating, (rating) => rating.wallpaper)
   ratings: Rating[];
 }

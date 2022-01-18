@@ -39,7 +39,12 @@ export class UsersService {
   async getUser(id: number): Promise<User> {
     const value = await this.repository.findOne(id, {
       where: { user_status: 1 },
-      relations: ["profile", "photos", "videos", "videos.video_attributes"],
+      relations: [
+        'favorites',
+        'favorites.wallpaper',
+        'ratings',
+        'ratings.wallpaper',
+      ],
     });
     if (!value) {
       throw new NotFoundException();
