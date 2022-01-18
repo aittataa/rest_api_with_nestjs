@@ -48,10 +48,10 @@ export class WallpaperService {
         'ratings.user',
       ],
     });
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       return value;
+    } else {
+      throw new NotFoundException();
     }
   }
 
@@ -62,24 +62,24 @@ export class WallpaperService {
 
   async updateWallpaper(id: number, wallpaper: Wallpaper): Promise<Wallpaper> {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       await this.repository.update(id, wallpaper);
       return this.getWallpaper(value.id_wallpaper);
+    } else {
+      throw new NotFoundException();
     }
   }
 
   async deleteWallpaper(id: number) {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       value.delete_at = new Date(Date.now());
       await this.repository.update(id, value);
       return {
         message: 'Successfully deleted',
       };
+    } else {
+      throw new NotFoundException();
     }
   }
 }

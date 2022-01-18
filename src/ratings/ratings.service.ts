@@ -41,10 +41,10 @@ export class RatingsService {
       where: { rating_status: 1 },
       relations: ['user', 'wallpaper'],
     });
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       return value;
+    } else {
+      throw new NotFoundException();
     }
   }
 
@@ -55,24 +55,24 @@ export class RatingsService {
 
   async updateRating(id: number, rating: Rating): Promise<Rating> {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       await this.repository.update(id, rating);
       return this.getRating(value.id_rating);
+    } else {
+      throw new NotFoundException();
     }
   }
 
   async deleteRating(id: number) {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       value.delete_at = new Date(Date.now());
       await this.repository.update(id, value);
       return {
         message: 'Successfully deleted',
       };
+    } else {
+      throw new NotFoundException();
     }
   }
 }

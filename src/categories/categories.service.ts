@@ -40,10 +40,10 @@ export class CategoriesService {
       where: { category_status: 1 },
       relations: ['wallpapers'],
     });
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       return value;
+    } else {
+      throw new NotFoundException();
     }
   }
 
@@ -54,24 +54,24 @@ export class CategoriesService {
 
   async updateCategory(id: number, category: Category): Promise<Category> {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       await this.repository.update(id, category);
       return await this.getCategory(value.id_category);
+    } else {
+      throw new NotFoundException();
     }
   }
 
   async deleteCategory(id: number) {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       value.delete_at = new Date(Date.now());
       await this.repository.update(id, value);
       return {
         message: 'Successfully deleted',
       };
+    } else {
+      throw new NotFoundException();
     }
   }
 }

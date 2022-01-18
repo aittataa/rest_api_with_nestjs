@@ -39,10 +39,10 @@ export class ColorsService {
     const value = await this.repository.findOne(id, {
       where: { color_status: 1 },
     });
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       return value;
+    } else {
+      throw new NotFoundException();
     }
   }
 
@@ -53,24 +53,24 @@ export class ColorsService {
 
   async updateColor(id: number, color: Color): Promise<Color> {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       await this.repository.update(id, color);
       return await this.getColor(value.id_color);
+    } else {
+      throw new NotFoundException();
     }
   }
 
   async deleteColor(id: number) {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       value.delete_at = new Date(Date.now());
       await this.repository.update(id, value);
       return {
         message: 'Successfully deleted',
       };
+    } else {
+      throw new NotFoundException();
     }
   }
 }

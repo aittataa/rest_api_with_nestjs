@@ -21,10 +21,10 @@ export class AuthenticationService {
         'ratings.wallpaper',
       ],
     });
-    if (!user) {
-      throw new NotFoundException();
-    } else {
+    if (user) {
       return user;
+    } else {
+      throw new NotFoundException();
     }
   }
 
@@ -46,7 +46,7 @@ export class AuthenticationService {
       if (isMatch) {
         return value;
       } else {
-        throw new NotFoundException({ description: `${isMatch}` });
+        throw new NotFoundException();
       }
     } else {
       throw new NotFoundException();

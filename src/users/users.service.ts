@@ -46,10 +46,10 @@ export class UsersService {
         'ratings.wallpaper',
       ],
     });
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       return value;
+    } else {
+      throw new NotFoundException();
     }
   }
 
@@ -63,27 +63,27 @@ export class UsersService {
 
   async updateUser(id: number, user: User): Promise<User> {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       const salt = await bcrypt.genSalt();
       const password = await bcrypt.hash(user.user_password, salt);
       user.user_password = password;
       await this.repository.update(id, user);
       return await this.getUser(value.id_user);
+    } else {
+      throw new NotFoundException();
     }
   }
 
   async deleteUser(id: number) {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       value.delete_at = new Date(Date.now());
       await this.repository.update(id, value);
       return {
         message: 'Successfully deleted',
       };
+    } else {
+      throw new NotFoundException();
     }
   }
 }

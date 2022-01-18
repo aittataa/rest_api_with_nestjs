@@ -41,10 +41,10 @@ export class FavoritesService {
       where: { favorite_status: 1 },
       relations: ['user', 'wallpaper'],
     });
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       return value;
+    } else {
+      throw new NotFoundException();
     }
   }
 
@@ -55,24 +55,24 @@ export class FavoritesService {
 
   async updateFavorite(id: number, favorite: Favorite): Promise<Favorite> {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       await this.repository.update(id, favorite);
       return this.getFavorite(value.id_favorite);
+    } else {
+      throw new NotFoundException();
     }
   }
 
   async deleteFavorite(id: number) {
     const value = await this.repository.findOne(id);
-    if (!value) {
-      throw new NotFoundException();
-    } else {
+    if (value) {
       value.delete_at = new Date(Date.now());
       await this.repository.update(id, value);
       return {
         message: 'Successfully deleted',
       };
+    } else {
+      throw new NotFoundException();
     }
   }
 }
