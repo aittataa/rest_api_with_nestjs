@@ -21,7 +21,9 @@ export class AuthenticationService {
     if (user) {
       return user;
     } else {
-      throw new NotFoundException();
+      throw new NotFoundException({
+        message: 'User not exist',
+      });
     }
   }
 
@@ -44,36 +46,46 @@ export class AuthenticationService {
         if (isMatch) {
           return value;
         } else {
-          throw new NotFoundException();
+          throw new BadRequestException({
+            message: 'Password must be wrong',
+          });
         }
       } else {
-        throw new NotFoundException();
+        throw new NotFoundException({
+          message: 'User not exist',
+        });
       }
     } else {
-      throw new NotFoundException();
+      throw new BadRequestException({ message: 'Field are required' });
     }
   }
 
   async registerUser(user: User) {
-    try {
-      if (
-        user.user_name != null &&
-        user.user_email != null &&
-        user.user_password != null &&
-        user.user_phone != null
-      ) {
+    if (
+      user.user_name != null &&
+      user.user_username != null &&
+      user.user_email != null &&
+      user.user_password != null &&
+      user.user_phone != null
+    ) {
+      const value = await this.repository.findOne({
+        where: [
+          { user_username: user.user_username },
+          { user_email: user.user_email },
+        ],
+      });
+      if (!value) {
         const salt = await bcrypt.genSalt();
         const password = await bcrypt.hash(user.user_password, salt);
         user.user_password = password;
-        const value = await this.repository.save(user);
-        return await this.repository.findOne(value.id_user);
+        return await this.repository.save(user);
       } else {
-        throw new NotFoundException({ message: 'Field are required' });
+        throw new InternalServerErrorException({
+          message: 'This email or username is already exist',
+        });
       }
-    } catch (e) {
-      throw new InternalServerErrorException({
-        message: 'This email or username is already exist',
-      });
+    } else {
+      throw new BadRequestException({ message: 'Field are required' });
     }
   }
 }

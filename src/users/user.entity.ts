@@ -9,9 +9,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Rating } from 'src/ratings/rating.entity';
-import { Expose } from 'class-transformer';
-import { IsEmail, IsNotEmpty } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'tbl_user' })
 export class User {
