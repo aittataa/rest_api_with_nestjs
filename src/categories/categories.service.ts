@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from './category.entity';
@@ -44,8 +49,23 @@ export class CategoriesService {
   }
 
   async createCategory(category: Category): Promise<Category> {
-    const value = await this.repository.save(category);
-    return await this.getCategory(value.id_category);
+    if (category.category_name != null && category.category_image != null) {
+      const value = await this.repository.findOne({
+        where: { category_name: category.category_name },
+      });
+      if (!value) {
+        const newCategory = await this.repository.save(category);
+        return await this.getCategory(newCategory.id_category);
+      } else {
+        throw new InternalServerErrorException({
+          message: 'This category name is already exist',
+        });
+      }
+    } else {
+      throw new BadRequestException({
+        message: 'Name and image are required',
+      });
+    }
   }
 
   async updateCategory(id: number, category: Category): Promise<Category> {

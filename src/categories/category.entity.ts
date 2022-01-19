@@ -14,7 +14,7 @@ export class Category {
   @PrimaryGeneratedColumn()
   id_category: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   category_name: string;
 
   @Column({ nullable: false })
