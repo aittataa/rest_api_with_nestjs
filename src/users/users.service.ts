@@ -14,7 +14,6 @@ export class UsersService {
   async getUsers(limit: number, page_index: number) {
     try {
       const [data, total] = await this.repository.findAndCount({
-        where: { user_status: 1 },
         take: limit,
         skip: (page_index - 1) * limit,
       });
@@ -37,15 +36,7 @@ export class UsersService {
   }
 
   async getUser(id: number): Promise<User> {
-    const value = await this.repository.findOne(id, {
-      where: { user_status: 1 },
-      // relations: [
-      //   'favorites',
-      //   'favorites.wallpaper',
-      //   'ratings',
-      //   'ratings.wallpaper',
-      // ],
-    });
+    const value = await this.repository.findOne(id);
     if (value) {
       return value;
     } else {

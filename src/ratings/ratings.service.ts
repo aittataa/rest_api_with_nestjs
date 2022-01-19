@@ -13,7 +13,6 @@ export class RatingsService {
   async getRatings(limit: number, page_index: number) {
     try {
       const [data, total] = await this.repository.findAndCount({
-        where: { rating_status: 1 },
         relations: ['user', 'wallpaper'],
         take: limit,
         skip: (page_index - 1) * limit,
@@ -38,7 +37,6 @@ export class RatingsService {
 
   async getRating(id: number): Promise<Rating> {
     const value = await this.repository.findOne(id, {
-      where: { rating_status: 1 },
       relations: ['user', 'wallpaper'],
     });
     if (value) {

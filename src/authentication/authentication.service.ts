@@ -1,9 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -16,30 +20,32 @@ export class AuthenticationService {
     const user = await this.repository.findOne(id);
     if (user) {
       return user;
-      // return {
-      //   id_user: user.id_user,
-      //   user_name: user.user_name,
-      //   user_username: user.user_username,
-      //   user_email: user.user_email,
-      //   user_password: user.user_password,
-      //   user_phone: user.user_phone,
-      // };
     } else {
       throw new NotFoundException();
     }
   }
 
   async loginUser(user: User) {
-    const value = await this.repository.findOne({
-      where: [
-        { user_email: user.user_email },
-        { user_username: user.user_username },
-      ],
-    });
-    if (value) {
-      const isMatch = bcrypt.compare(user.user_password, value.user_password);
-      if (isMatch) {
-        return value;
+    if (
+      (user.user_username != null || user.user_email != null) &&
+      user.user_password != null
+    ) {
+      const value = await this.repository.findOne({
+        where: [
+          { user_email: user.user_email },
+          { user_username: user.user_username },
+        ],
+      });
+      if (value) {
+        const isMatch = await bcrypt.compare(
+          user.user_password,
+          value.user_password,
+        );
+        if (isMatch) {
+          return value;
+        } else {
+          throw new NotFoundException();
+        }
       } else {
         throw new NotFoundException();
       }
@@ -49,10 +55,25 @@ export class AuthenticationService {
   }
 
   async registerUser(user: User) {
-    const salt = await bcrypt.genSalt();
-    const password = await bcrypt.hash(user.user_password, salt);
-    user.user_password = password;
-    const value = await this.repository.save(user);
-    return await this.repository.findOne(value.id_user);
+    try {
+      if (
+        user.user_name != null &&
+        user.user_email != null &&
+        user.user_password != null &&
+        user.user_phone != null
+      ) {
+        const salt = await bcrypt.genSalt();
+        const password = await bcrypt.hash(user.user_password, salt);
+        user.user_password = password;
+        const value = await this.repository.save(user);
+        return await this.repository.findOne(value.id_user);
+      } else {
+        throw new NotFoundException({ message: 'Field are required' });
+      }
+    } catch (e) {
+      throw new InternalServerErrorException({
+        message: 'This email or username is already exist',
+      });
+    }
   }
 }

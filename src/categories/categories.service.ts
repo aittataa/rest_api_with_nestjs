@@ -13,7 +13,6 @@ export class CategoriesService {
   async getCategories(limit: number, page_index: number) {
     try {
       const [data, total] = await this.repository.findAndCount({
-        where: { category_status: 1 },
         take: limit,
         skip: (page_index - 1) * limit,
       });
@@ -36,10 +35,7 @@ export class CategoriesService {
   }
 
   async getCategory(id: number): Promise<Category> {
-    const value = await this.repository.findOne(id, {
-      where: { category_status: 1 },
-      //relations: ['wallpapers'],
-    });
+    const value = await this.repository.findOne(id);
     if (value) {
       return value;
     } else {

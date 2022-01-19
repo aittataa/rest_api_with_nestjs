@@ -1,19 +1,17 @@
 import { Favorite } from 'src/favorites/favorite.entity';
-import * as bcrypt from 'bcrypt';
 import {
-  BeforeInsert,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Rating } from 'src/ratings/rating.entity';
-import { Wallpaper } from 'src/wallpaper/wallpaper.entity';
+import { Expose } from 'class-transformer';
+import { IsEmail, IsNotEmpty } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'tbl_user' })
 export class User {
@@ -41,7 +39,7 @@ export class User {
   @Column({ nullable: false, default: 'profile.png' })
   user_image: string;
 
-  @Column({ nullable: false, default: 0 })
+  @Column({ nullable: false, default: 1 })
   user_status: number;
 
   @CreateDateColumn()

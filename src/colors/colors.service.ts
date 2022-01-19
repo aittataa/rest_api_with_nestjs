@@ -13,7 +13,6 @@ export class ColorsService {
   async getColors(limit: number, page_index: number) {
     try {
       const [data, total] = await this.repository.findAndCount({
-        where: { color_status: 1 },
         take: limit,
         skip: (page_index - 1) * limit,
       });
@@ -36,9 +35,7 @@ export class ColorsService {
   }
 
   async getColor(id: number): Promise<Color> {
-    const value = await this.repository.findOne(id, {
-      where: { color_status: 1 },
-    });
+    const value = await this.repository.findOne(id);
     if (value) {
       return value;
     } else {
