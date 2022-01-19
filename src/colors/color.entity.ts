@@ -30,6 +30,6 @@ export class Color {
   @DeleteDateColumn()
   delete_at: Date;
 
-//   @OneToMany(() => Wallpaper, (wallpaper) => wallpaper.category)
-//   wallpapers: Wallpaper[];
+  // @OneToMany(() => Wallpaper, (wallpaper) => wallpaper.category)
+  // wallpapers: Wallpaper[];
 }
