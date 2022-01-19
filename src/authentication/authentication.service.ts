@@ -16,18 +16,16 @@ export class AuthenticationService {
     private repository: Repository<User>,
   ) {}
 
-  async keepUser(id: number) {
+  async keepUser(id: number): Promise<User> {
     const user = await this.repository.findOne(id);
     if (user) {
       return user;
     } else {
-      throw new NotFoundException({
-        message: 'User not exist',
-      });
+      throw new NotFoundException();
     }
   }
 
-  async loginUser(user: User) {
+  async loginUser(user: User): Promise<User> {
     if (
       (user.user_username != null || user.user_email != null) &&
       user.user_password != null
@@ -51,16 +49,14 @@ export class AuthenticationService {
           });
         }
       } else {
-        throw new NotFoundException({
-          message: 'User not exist',
-        });
+        throw new NotFoundException();
       }
     } else {
-      throw new BadRequestException({ message: 'Field are required' });
+      throw new BadRequestException({ message: 'Fields are required' });
     }
   }
 
-  async registerUser(user: User) {
+  async registerUser(user: User): Promise<User> {
     if (
       user.user_name != null &&
       user.user_username != null &&
@@ -78,14 +74,15 @@ export class AuthenticationService {
         const salt = await bcrypt.genSalt();
         const password = await bcrypt.hash(user.user_password, salt);
         user.user_password = password;
-        return await this.repository.save(user);
+        const newUser = await this.repository.save(user);
+        return newUser;
       } else {
         throw new InternalServerErrorException({
           message: 'This email or username is already exist',
         });
       }
     } else {
-      throw new BadRequestException({ message: 'Field are required' });
+      throw new BadRequestException({ message: 'Fields are required' });
     }
   }
 }
