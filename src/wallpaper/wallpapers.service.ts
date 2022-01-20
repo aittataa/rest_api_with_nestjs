@@ -14,11 +14,9 @@ export class WallpaperService {
     private repository: Repository<Wallpaper>,
   ) {}
 
-  async getWallpapers(limit: number, page_index: number, search: string) {
+  async getWallpapers(limit: number, page_index: number) {
     try {
-      console.log(search);
       const [data, total] = await this.repository.findAndCount({
-        where: search,
         relations: ['category', 'favorites', 'ratings'],
         take: limit,
         skip: (page_index - 1) * limit,

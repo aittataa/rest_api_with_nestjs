@@ -19,9 +19,9 @@ export class WallpapersController {
   async getWallpapers(
     @Query('limit') limit: number,
     @Query('page_index') page_index: number,
-    @Query('search') search: string,
+    
   ) {
-    return this.service.getWallpapers(limit, page_index, search);
+    return this.service.getWallpapers(limit, page_index);
   }
 
   @Get(':id')
