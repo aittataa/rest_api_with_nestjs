@@ -36,7 +36,7 @@ export class User {
   @Column({ nullable: false, default: 'profile.png' })
   user_image: string;
 
-  @Column({ nullable: false, default: 1 })
+  @Column({ nullable: false, default: 0 })
   user_status: number;
 
   @CreateDateColumn()

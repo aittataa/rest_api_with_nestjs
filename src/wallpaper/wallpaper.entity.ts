@@ -39,7 +39,7 @@ export class Wallpaper {
   @Column()
   wallpaper_colors: string;
 
-  @Column({ nullable: false, default: 1 })
+  @Column({ nullable: false, default: 0 })
   wallpaper_status: number;
 
   @CreateDateColumn()
