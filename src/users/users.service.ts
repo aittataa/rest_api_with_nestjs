@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -45,11 +50,35 @@ export class UsersService {
   }
 
   async createUser(user: User): Promise<User> {
-    const salt = await bcrypt.genSalt();
-    const password = await bcrypt.hash(user.user_password, salt);
-    user.user_password = password;
-    const value = await this.repository.save(user);
-    return await this.getUser(value.id_user);
+    if (
+      user.user_name != null &&
+      user.user_username != null &&
+      user.user_email != null &&
+      user.user_password != null &&
+      user.user_phone != null
+    ) {
+        const value = await this.repository.findOne({
+          where: [
+            { user_username: user.user_username },
+            { user_email: user.user_email },
+          ],
+        });
+        if (!value) {
+          const salt = await bcrypt.genSalt();
+          const password = await bcrypt.hash(user.user_password, salt);
+          user.user_password = password;
+          const newUser = await this.repository.save(user);
+          return await this.getUser(value.id_user);
+        } else {
+          throw new InternalServerErrorException({
+            message: 'Email or username already exists.',
+          });
+        }
+    } else {
+      throw new BadRequestException({
+        message: 'All the fields are required.',
+      });
+    }
   }
 
   async updateUser(id: number, user: User): Promise<User> {

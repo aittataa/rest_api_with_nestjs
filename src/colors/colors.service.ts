@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Color } from './color.entity';
@@ -44,8 +49,26 @@ export class ColorsService {
   }
 
   async createColor(color: Color): Promise<Color> {
-    const value = await this.repository.save(color);
-    return await this.getColor(value.id_color);
+    if (color.color_name != null && color.color_code != null) {
+      const value = await this.repository.findOne({
+        where: [
+          { color_name: color.color_name },
+          { color_code: color.color_code },
+        ],
+      });
+      if (!value) {
+        const newColor = await this.repository.save(color);
+        return await this.getColor(newColor.id_color);
+      } else {
+        throw new InternalServerErrorException({
+          message: 'This color name or color code already exists.',
+        });
+      }
+    } else {
+      throw new BadRequestException({
+        message: 'The color name and color code are required.',
+      });
+    }
   }
 
   async updateColor(id: number, color: Color): Promise<Color> {

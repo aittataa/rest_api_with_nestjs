@@ -15,7 +15,7 @@ export class Color {
   @Column({ nullable: false })
   color_name: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   color_code: string;
 
   @Column({ nullable: false, default: 1 })

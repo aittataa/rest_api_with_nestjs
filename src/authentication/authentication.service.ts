@@ -16,7 +16,7 @@ export class AuthenticationService {
     private repository: Repository<User>,
   ) {}
 
-  async keepUser(id: number): Promise<User> {
+  async getUser(id: number): Promise<User> {
     const user = await this.repository.findOne(id);
     if (user) {
       return user;
@@ -45,14 +45,16 @@ export class AuthenticationService {
           return value;
         } else {
           throw new BadRequestException({
-            message: 'Password must be wrong',
+            message: 'This password is incorrect.',
           });
         }
       } else {
         throw new NotFoundException();
       }
     } else {
-      throw new BadRequestException({ message: 'Fields are required' });
+      throw new BadRequestException({
+        message: 'All the fields are required.',
+      });
     }
   }
 
@@ -75,14 +77,16 @@ export class AuthenticationService {
         const password = await bcrypt.hash(user.user_password, salt);
         user.user_password = password;
         const newUser = await this.repository.save(user);
-        return newUser;
+        return this.getUser(newUser.id_user);
       } else {
         throw new InternalServerErrorException({
-          message: 'This email or username is already exist',
+          message: 'Email or username already exists.',
         });
       }
     } else {
-      throw new BadRequestException({ message: 'Fields are required' });
+      throw new BadRequestException({
+        message: 'All the fields are required.',
+      });
     }
   }
 }

@@ -18,6 +18,6 @@ export class AuthenticationController {
 
   @Get(':id')
   keepUser(@Param('id') id) {
-    return this.service.keepUser(id);
+    return this.service.getUser(id);
   }
 }

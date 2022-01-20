@@ -58,12 +58,12 @@ export class CategoriesService {
         return await this.getCategory(newCategory.id_category);
       } else {
         throw new InternalServerErrorException({
-          message: 'This category name is already exist',
+          message: 'This category name already exists.',
         });
       }
     } else {
       throw new BadRequestException({
-        message: 'Name and image are required',
+        message: 'The category name and image are required.',
       });
     }
   }
