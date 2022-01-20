@@ -1,6 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from 'src/categories/category.entity';
 import { Repository } from 'typeorm';
 import { Wallpaper } from './wallpaper.entity';
 
@@ -11,9 +14,11 @@ export class WallpaperService {
     private repository: Repository<Wallpaper>,
   ) {}
 
-  async getWallpapers(limit: number, page_index: number) {
+  async getWallpapers(limit: number, page_index: number, search: string) {
     try {
+      console.log(search);
       const [data, total] = await this.repository.findAndCount({
+        where: search,
         relations: ['category', 'favorites', 'ratings'],
         take: limit,
         skip: (page_index - 1) * limit,
@@ -48,8 +53,14 @@ export class WallpaperService {
   }
 
   async createWallpaper(wallpaper: Wallpaper): Promise<Wallpaper> {
-    const value = await this.repository.save(wallpaper);
-    return this.getWallpaper(value.id_wallpaper);
+    if (wallpaper.wallpaper_image != null) {
+      const value = await this.repository.save(wallpaper);
+      return this.getWallpaper(value.id_wallpaper);
+    } else {
+      throw new BadRequestException({
+        message: 'image fields are required.',
+      });
+    }
   }
 
   async updateWallpaper(id: number, wallpaper: Wallpaper): Promise<Wallpaper> {
