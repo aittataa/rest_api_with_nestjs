@@ -45,7 +45,7 @@ export class AuthenticationService {
           return value;
         } else {
           throw new BadRequestException({
-            message: 'This password is incorrect.',
+            message: 'The password is incorrect.',
           });
         }
       } else {
